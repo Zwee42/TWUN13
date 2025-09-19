@@ -14,30 +14,30 @@
 Our project will be about building a web application that will help individuals and groups manage their tasks efficiently. Users can create, assign, take notes and track tasks within projects or workplaces. The system also supports a timer for focus and productivity and some sort of documentation, collaboration through shared comments and files. We will also make it possible to create study groups.
 
 Preliminary List of Features;
-  Task Management: 
-    Create, edit, delete tasks.
-    Split tasks into subtasks.
-    Assign tasks to users or specific days. 
-    Track task status (to do, in progress, done)
- 
-  Registration and Authentication
-      Authentication and registration
 
-Documentation
-    Create, edit, and remove documentation pages
-    Being able to attach and manage files within documentation. 
+**Registration and Authentication** <br/>
+  
+**Task Management:**<br/> 
+&nbsp; Create, edit, delete tasks.<br/>
+&nbsp; Split tasks into subtasks.<br/>
+&nbsp; Assign tasks to users or specific days. <br/>
+&nbsp; Track task status (to do, in progress, done)<br/>  
 
-Collaboration
-     being able to comment on tasks and documentation
-     Assign tasks to different members.
+**Documentation:**<br/>
+&nbsp; Create, edit, and remove documentation pages<br/>
+&nbsp; Being able to attach and manage files within documentation. <br/>
 
-  Productivity
-      Built in focus timer (custamable)
-      Notifications/reminders for deadlines
+Collaboration:<br/>
+&nbsp;being able to comment on tasks and documentation<br/>
+&nbsp;Assign tasks to different members.<br/>
 
-Workplace/project management
-      Create and manage multiple projects / workplaces
-      Invite or add users to projects
+**Productivity:**<br/>
+&nbsp;Built in focus timer (custamable)<br/>
+&nbsp;Notifications/reminders for deadlines<br/>
+
+**Workplace/project management:**<br/>
+&nbsp;Create and manage multiple projects / workplaces<br/>
+&nbsp;Invite or add users to projects<br/>
 
 
 ### Technologies Used
