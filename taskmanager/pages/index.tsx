@@ -5,7 +5,7 @@
 export default function Home() {
 
   const handleSignUp = () => {
-    window.location.href = "/signup"; // väntar på att bli called
+    window.location.href = "/register"; // väntar på att bli called
 };
 
 
@@ -32,9 +32,16 @@ export default function Home() {
 
   <div className="relative z-10 flex flex-col items-center justify-center h-full">
     <h5 className="text-4xl text-white mb-6">Hello My Productivity</h5>
-    <button className="px-6 py-3 bg-purple-600 text-white font-semibold shadow-md hover:bg-blue-700">
+    <button
+     onClick ={handleSignIn}
+    className="px-6 py-3 bg-purple-600 text-white font-semibold shadow-md hover:bg-blue-700">
       Login
     </button>
+
+    < button 
+      onClick={handleSignUp}
+    className="px-6 py-3 bg-purple-600 text-white font-semibold shadow-md hover:bg-blue-700">
+     register </button>
   </div>
 
 </main>
