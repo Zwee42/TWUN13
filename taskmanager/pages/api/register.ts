@@ -29,9 +29,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
 
             // kanske emailen redan existser?
-            const existingUser = await User.findOne({ email });
-                if (existingUser) {
+            const existingEmail = await User.findOne({ email });
+                if (existingEmail) {
                     return res.status(400).json({message: "be original"});
+                }
+
+            const existingUsername = await User.findOne({ username });
+                if (existingUsername) {
+                    return res.status(400).json({message: "username already in use"});
                 }
 
                 const hashedPassword = await bcrypt.hash(password, 10);
@@ -45,11 +50,20 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 
 
 
-        } catch (err) {
+        } catch( err :any ) {
             console.error(err);
-            return res.status(500).json({error: " something went wrong :( "});
-        }
 
+            if(err.code == 11000) {
+                return res.status(400).json({message: "email or username laready taken"});
+
+            }
+                        return res.status(500).json({error: " something went wrong :( "});
+
+        }
+        
+        
+        
+       
 
 
 

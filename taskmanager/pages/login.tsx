@@ -8,7 +8,7 @@ export default function Home() {
   
   const handleLogin = async () => {
     if (!email || !password) {
-      alert("ehm, please fill in all fields........");
+      alert("ehm, please fill in all fields.......?.");
       return;
     }
     
@@ -26,6 +26,7 @@ export default function Home() {
 
         if (res.ok) {
           alert ("login succeflul, woo ");
+          window.location.href = "/homepage"
         } else {
           alert("login failed ")
         }
@@ -49,58 +50,45 @@ export default function Home() {
   
 
   return (
-    <main className="relative w-full h-screen overflow-hidden">
-      
-      <div
-        className="absolute inset-0"
-        style={{
-          backgroundColor: "#2E1A47",
-          clipPath: "polygon(0 0, 100% 0, 100% 50%, 0 100%)",
-        }}
-      ></div>
-      <div
-        className="absolute inset-0 bg-black"
-        style={{ clipPath: "polygon(0 60%, 100% 0, 100% 100%, 0 100%)" }}
-      ></div>
 
-      {/* content */}
-      <div className="relative z-10 flex flex-col items-center justify-center h-full space-y-4">
-        <h5 className="text-4xl text-white mb-6">login</h5>
+      <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from black via-purple-950 to black">
+     
+     
+      <div className="bg-black p-8 rounded-2x1 shadow-2x1 w-96">
+        
+        
+        <h1 className="text-2xl fony-bold text-center text-purple-400 mb-6">Login</h1>
 
-        {/* username input */}
         <input
           type="text"
           placeholder="email"
           value={email}
           onChange={(e) => setEmailValue(e.target.value)}
-          className="px-4 py-2 rounded-md border border-gray-400 focus:outline-none"
+          className="w-full mb-4 p-3 rounded-lg bg-gray-800 text-white placeholder-gray focus:outline-none focus:ring-2 focus:ring-purple-500"
         />
 
-        {/* password input */}
         <input
           value={password}
           type="password"
           placeholder="Password"
           onChange={(e) => setPassword(e.target.value)}
-          className="px-4 py-2 rounded-md border border-gray-400 focus:outline-none"
+          className="w-full mb-6 p-3 rounded-lg bg-gray-800 text-white placeholder-gray-400 focus:outline-none focus:ring-purple-600"
         />
 
-        {/* login button */}
         <button
           onClick={handleLogin}
-          className="px-6 py-3 bg-purple-600 text-white font-semibold shadow-md hover:bg-blue-700"
+          className="w-full mb-3 py-3 bg-purple-900 text-white font-semibold rounded-lg shadow-md hover:bg-black transition"
         >
           Login
         </button>
 
-        {/* sign up redirect */}
         <button
           onClick={handleSignUp}
-          className="px-6 py-3 bg-purple-600 text-white font-semibold shadow-md hover:bg-blue-700"
+          className="w-full py-3 bg-purple-900 text-white font-semibold rounded-lg shadow-md hover:bg-black transition"
         >
-          Don’t have an account? — Register
+          Don’t have an account? Register
         </button>
       </div>
-    </main>
+    </div>
   );
 }
