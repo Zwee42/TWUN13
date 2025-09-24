@@ -52,11 +52,11 @@ We will use **npm** for managing dependencies and building the project.
 ### Installation
 1. Clone the repository:
    ```sh
-   git clone https://github.com/Zwee42/TMUK14Project.git
+   git clone https://github.com/Zwee42/TWUN13.git
    ```
 2. Navigate to the project directory:
    ```sh
-   cd TMUK14Project/hellosociallife
+   cd TWUN13/taskmanager
    ```
 3. Install dependencies:
    ```sh
