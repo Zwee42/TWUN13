@@ -128,7 +128,7 @@ export default function NotesPage() {
 
         <Link href="/notes" passHref>
           <button className="w-full bg-purple-800/80 hover:bg-purple-700 py-3 px-4 rounded-lg text-center shadow-lg">
-            New note
+            Settings
           </button>
         </Link>
 

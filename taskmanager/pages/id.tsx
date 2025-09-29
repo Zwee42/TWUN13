@@ -130,13 +130,17 @@ export default function EditNotePage() {
                         Notes list
                     </button>
                 </Link>
+                <Link href="/index" passHref>
+                    <button className="w-full bg-purple-800/80 hover:bg-purple-700 py-3 px-4 rounded-lg shadow-lg">
+                        Settings
+                    </button>
+                </Link>
 
-                <button className="w-full bg-purple-800/80 hover:bg-purple-700 py-3 px-4 rounded-lg shadow-lg">
-                    Settings
-                </button>
-                <button className="w-full bg-purple-900/80 hover:bg-purple-950 py-3 px-4 rounded-lg shadow-lg">
-                    trash
-                </button>
+                <Link href="/trash" passHref>
+                    <button className="w-full bg-purple-800/80 hover:bg-purple-700 py-3 px-4 rounded-lg shadow-lg">
+                        Trash
+                    </button>
+                </Link>
             </aside>
 
             {/* Main */}
