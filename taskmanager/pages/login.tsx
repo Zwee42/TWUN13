@@ -5,58 +5,54 @@ export default function Home() {
   const [email, setEmailValue] = useState("");
   const [password, setPassword] = useState("");
 
-  
+
   const handleLogin = async () => {
     if (!email || !password) {
       alert("ehm, please fill in all fields.......?.");
       return;
     }
-    
+
     try {
 
       const res = await fetch("/api/login", {
         method: "POST",
-        headers: {"Content-Type": "application/json"},
-        body: JSON.stringify({email, password}),
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
       });
 
 
-        const data = await res.json();
-        console.log("Response from backedn", data);
+      const data = await res.json();
+      console.log("Response from backedn", data);
 
-        if (res.ok) {
-          alert ("login succeflul, woo ");
-          window.location.href = "/homepage"
-        } else {
-          alert("login failed ")
-        }
+      if (res.ok) {
+        localStorage.setItem("user", JSON.stringify(data.user));
+        alert("login succeflul, woo ");
+        window.location.href = "/notesList"
+      } else {
+        alert(data.message || "login failed ")
+      }
 
 
     } catch (err) {
       console.error("error conncetiong to backend", err);
-      alert ("something went wrong :3");
+      alert("something went wrong :3");
     }
 
 
   };
-
   // redirect to signup
   const handleSignUp = () => {
     window.location.href = "/register";
   };
 
-
-
-  
-
   return (
 
-      <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from black via-purple-950 to black">
-     
-     
+    <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from black via-purple-950 to black">
+
+
       <div className="bg-black p-8 rounded-2x1 shadow-2x1 w-96">
-        
-        
+
+
         <h1 className="text-2xl fony-bold text-center text-purple-400 mb-6">Login</h1>
 
         <input
