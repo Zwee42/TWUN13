@@ -22,6 +22,7 @@ export default function EditNotePage() {
     const [loading, setLoading] = useState(true);
     const [message, setMessage] = useState("");
     const [isSuccess, setIsSuccess] = useState(false);
+    const [shareEmail, setShareEmail] = useState("");
 
     // Hämta anteckningen
     useEffect(() => {
@@ -87,6 +88,31 @@ export default function EditNotePage() {
             setIsSuccess(true);
             setTimeout(() => router.push("/notesList"), 1500);
         } catch (err: any) {
+            setMessage(err.message);
+        }
+    }
+
+    async function handleShare() {
+        if (!id || Array.isArray(id)) return;
+        if (!shareEmail) {
+            setMessage("Please enter an email to share with");
+            return;
+        }
+
+        try {
+            const res = await fetch("/api/share", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ noteId: id, email: shareEmail }),
+            });
+
+            if (!res.ok) throw new Error("Could not share the note");
+            setIsSuccess(false);
+            setMessage(`Note shared with ${shareEmail}`);
+            setIsSuccess(true);
+            setShareEmail("");
+        } catch (err: any) {
+            setIsSuccess(false);
             setMessage(err.message);
         }
     }
@@ -194,6 +220,22 @@ export default function EditNotePage() {
                         </button>
                     </div>
                 </form>
+
+                {/* Delning */}
+                <div className="flex gap-3 mb-6">
+                    <input
+                        className="border border-purple-700 bg-black/80 p-3 rounded-lg text-white flex-1"
+                        placeholder="Enter email to share with"
+                        value={shareEmail}
+                        onChange={(e) => setShareEmail(e.target.value)}
+                    />
+                    <button
+                        onClick={handleShare}
+                        className="bg-purple-600 text-white px-6 py-3 rounded-xl font-semibold hover:bg-purple-500 shadow-md transition-all"
+                    >
+                        Share
+                    </button>
+                </div>
 
                 {message && (
                     <div

@@ -2,7 +2,7 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import dbConnect from "@/lib/mongodb";
 import Note from "@/models/Note";
 import mongoose from "mongoose";
-import { METHODS } from "http";
+
 
 export default async function handler(req: NextApiRequest, res:NextApiResponse) {
     await dbConnect();

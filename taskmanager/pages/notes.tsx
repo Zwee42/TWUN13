@@ -12,6 +12,10 @@ type Note = {
   createdAt: string;
   updatedAt?: string;
 };
+type User = {
+  email: string;
+  username?: string;
+};
 
 export default function NotesPage() {
   const router = useRouter();
@@ -23,6 +27,20 @@ export default function NotesPage() {
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
+  const [shareEmail, setShareEmail] = useState("");
+  const [loggedInUser, setLoggedInUser] = useState<User | null>(null);
+  const [noteId, setNoteId] = useState<string | null>(null); // sparar _id för nya notes
+
+  useEffect(() => {
+    const raw = typeof window !== "undefined" ? localStorage.getItem("user") : null;
+    if (raw) {
+      try {
+        setLoggedInUser(JSON.parse(raw));
+      } catch {
+        setLoggedInUser(null);
+      }
+    }
+  }, []);
 
   // Hämta anteckningen vid redigering
   useEffect(() => {
@@ -31,11 +49,13 @@ export default function NotesPage() {
     const fetchNote = async () => {
       try {
         setLoading(true);
-        const res = await fetch(`/api/notes/${id}`);
+        const res = await fetch(`/api/id?id=${id}`);
         if (!res.ok) throw new Error("Could not retrieve the note");
+        setIsSuccess(false);
         const note = await res.json();
         setTitle(note.title || "");
         setContent(note.content || "");
+        setNoteId(note._id); // spara id när vi är i edit
       } catch (err: any) {
         setMessage(err.message);
       } finally {
@@ -51,34 +71,40 @@ export default function NotesPage() {
     e.preventDefault();
 
     try {
+      if (!loggedInUser) {
+        setMessage("You must be logged in to create or edit notes.");
+        setIsSuccess(false);
+        return;
+      }
+
       if (isEditing && id) {
-        const res = await fetch(`/api/notes/${id}`, {
+        // uppdatera befintlig note
+        const res = await fetch(`/api/id?id=${id}`, {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ title, content }),
         });
-        if (!res.ok) throw new Error("Could not uptade the note");
-        setIsSuccess(false);
-        setMessage("!");
-        setTimeout(() => router.push("/notesList"), 1500);
+        if (!res.ok) throw new Error("Could not update the note");
+        setMessage("Note updated successfully!");
+        setIsSuccess(true);
         return;
       }
 
-      // Skapa ny anteckning
+      // skapa ny note
       const res = await fetch("/api/notes", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ title, content, userId: "testuser" }),
+        body: JSON.stringify({ title, content, userId: loggedInUser.email }),
       });
       if (!res.ok) throw new Error("Could not save the note");
-      setIsSuccess(false);
-      setMessage("Note updated successfully");
+
+      const savedNote = await res.json();
+      setNoteId(savedNote._id); // spara id så vi kan dela direkt
+      setMessage("Note saved successfully!");
       setIsSuccess(true);
-      setTitle("");
-      setContent("");
-      setTimeout(() => setMessage(""), 2000);
     } catch (err: any) {
       setMessage(err.message);
+      setIsSuccess(false);
     }
   }
 
@@ -95,11 +121,44 @@ export default function NotesPage() {
       });
 
       if (!res.ok) throw new Error("Could not move note to trash!");
-      setIsSuccess(false);
       setMessage("Note moved to trash");
       setIsSuccess(true);
-      setTimeout(() => router.push("/notesList"), 1500); // gå tillbaka till lista
+      setTimeout(() => router.push("/notesList"), 1500);
     } catch (err: any) {
+      setMessage(err.message);
+      setIsSuccess(false);
+    }
+  }
+
+  // Dela anteckning
+  async function handleShare() {
+    const currentNoteId = isEditing ? (id as string) : noteId;
+
+    if (!currentNoteId) {
+      setMessage("You must save the note before sharing.");
+      setIsSuccess(false);
+      return;
+    }
+
+    if (!shareEmail) {
+      setMessage("Please enter an email to share with");
+      return;
+    }
+
+    try {
+      const res = await fetch("/api/share", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ noteId: currentNoteId, email: shareEmail }),
+      });
+
+      if (!res.ok) throw new Error("Could not share the note");
+
+      setMessage(`Note shared with ${shareEmail}`);
+      setIsSuccess(true);
+      setShareEmail("");
+    } catch (err: any) {
+      setIsSuccess(false);
       setMessage(err.message);
     }
   }
@@ -107,7 +166,7 @@ export default function NotesPage() {
   if (loading) {
     return (
       <div className="flex min-h-screen bg-gradient-to-br from-black via-purple-950 to-black text-white items-center justify-center">
-        <p className="text-gray-400 text-xl">Laddar anteckning...</p>
+        <p className="text-gray-400 text-xl">Loading note...</p>
       </div>
     );
   }
@@ -126,15 +185,9 @@ export default function NotesPage() {
           </button>
         </Link>
 
-        <Link href="/notes" passHref>
-          <button className="w-full bg-purple-800/80 hover:bg-purple-700 py-3 px-4 rounded-lg text-center shadow-lg">
-            Settings
-          </button>
-        </Link>
-
         <Link href="/trash" passHref>
           <button className="w-full bg-purple-900/80 hover:bg-purple-950 py-3 px-4 rounded-lg text-center shadow-lg">
-            trash
+            Trash
           </button>
         </Link>
       </aside>
@@ -152,7 +205,7 @@ export default function NotesPage() {
         >
           <input
             className="border border-purple-700 bg-black/80 p-3 rounded-lg focus:ring-2 focus:ring-purple-600 outline-none text-white"
-            placeholder="Titel"
+            placeholder="Title"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
           />
@@ -176,7 +229,7 @@ export default function NotesPage() {
               type="submit"
               className="bg-purple-700 text-white px-6 py-3 rounded-xl font-semibold hover:bg-purple-600 shadow-md transition-all"
             >
-              {isEditing ? "Uppdatera" : "Spara"}
+              {isEditing ? "Update" : "Save"}
             </button>
 
             {isEditing && id && (
@@ -191,10 +244,27 @@ export default function NotesPage() {
           </div>
         </form>
 
+        {/* Share */}
+        <div className="flex gap-3 mb-6">
+          <input
+            className="border border-purple-700 bg-black/80 p-3 rounded-lg text-white flex-1"
+            placeholder="Enter email to share with"
+            value={shareEmail}
+            onChange={(e) => setShareEmail(e.target.value)}
+          />
+          <button
+            onClick={handleShare}
+            className="bg-purple-600 text-white px-6 py-3 rounded-xl font-semibold hover:bg-purple-500 shadow-md transition-all"
+          >
+            Share
+          </button>
+        </div>
+
         {message && (
           <div
-            className={`mb-6 p-3 rounded-lg text-center font-medium shadow-md ${isSuccess ? "bg-green-600/70 text-green-100" : "bg-red-600/70 text-red-100"
-              }`}
+            className={`mb-6 p-3 rounded-lg text-center font-medium shadow-md ${
+              isSuccess ? "bg-green-600/70 text-green-100" : "bg-red-600/70 text-red-100"
+            }`}
           >
             {message}
           </div>
