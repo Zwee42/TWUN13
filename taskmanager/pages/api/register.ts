@@ -5,6 +5,7 @@ import dbConnect from '@/lib/mongodb'
 import  User  from '@/models/User';
 
 import bcrypt from 'bcryptjs';
+import { MongoServerError } from 'mongodb';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
 
@@ -50,10 +51,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 
 
 
-        } catch( err :any ) {
+        } catch( err : unknown ) {
             console.error(err);
 
-            if(err.code == 11000) {
+            if (err instanceof MongoServerError && err.code === 11000) {
                 return res.status(400).json({message: "email or username laready taken"});
 
             }
