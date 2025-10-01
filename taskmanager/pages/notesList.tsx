@@ -3,7 +3,6 @@ import ReactMarkdown from "react-markdown";
 import remarkMath from "remark-math";
 import rehypeKatex from "rehype-katex";
 import Link from "next/link";
-import { useRouter } from "next/router";
 
 type Note = {
   _id: string;
@@ -14,7 +13,6 @@ type Note = {
 };
 
 export default function NotesListPage() {
-  const router = useRouter();
   const [notes, setNotes] = useState<Note[]>([]);
   const [loading, setLoading] = useState(true);
   const [message, setMessage] = useState("");

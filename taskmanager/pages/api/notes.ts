@@ -2,7 +2,6 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import dbConnect from "@/lib/mongodb";
 import Note from "@/models/Note";
 import { FilterQuery } from "mongoose";
-import { INote } from "@/models/Note";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   await dbConnect();

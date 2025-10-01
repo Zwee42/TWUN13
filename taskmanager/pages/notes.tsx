@@ -5,13 +5,13 @@ import ReactMarkdown from "react-markdown";
 import remarkMath from "remark-math";
 import rehypeKatex from "rehype-katex";
 
-type Note = {
-  _id: string;
-  title: string;
-  content: string;
-  createdAt: string;
-  updatedAt?: string;
-};
+// type Note = {
+//   _id: string;
+//   title: string;
+//   content: string;
+//   createdAt: string;
+//   updatedAt?: string;
+// };
 type User = {
   email: string;
   username?: string;

@@ -1,6 +1,5 @@
 import { createMocks } from 'node-mocks-http';
 import handler from '../pages/api/login';
-import dbConnect from '../lib/mongodb';
 import User from '../models/User';
 import bcrypt from 'bcryptjs';
 
