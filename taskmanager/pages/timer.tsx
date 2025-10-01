@@ -1,5 +1,5 @@
 
-
+// glöm inte att fixa audio till timern
 import { useEffect, useState } from "react";
 import {motion} from "framer-motion";
 
@@ -13,12 +13,14 @@ export default function Home() {
 
     // settting = to after the different modes is the default state
     const [activeMode, setActiveMode] = useState("Timer"); // acriveMode sparar den mode jag är i
+        // activeMode --> där variabeln lagrar, ochh setaktive mode där vi kan ändra variablen
+
     const [timeLeft, setTimeLeft] = useState(25 * 60); // har koll på hur många sekunder jag har kvar 
     const [isRunning, setIsRunning] = useState(false); // är timern på eller av?
     const [showSetting, setShowSettings] = useState(false); // tror ej jag kommer använda denna
-    const [durations, setDurations] = useState ({
-        Timer: 0.2 * 60,
-        "short break": 5 * 60,
+    const [durations, setDurations] = useState<Record<Mode, number>> ({
+        Timer: 25 * 60,
+        "short break": 1 * 60,
         "long break": 15 * 60,
     }) // sparar hur långa alla mode är i sekunder
 
@@ -32,17 +34,16 @@ export default function Home() {
     return makes sure we clean up the interval when the component re-renders */
 
     useEffect(() => {
-        let interval : NodeJS.Timeout;
+      //let interval : NodeJS.Timeout | null = null;
 
         if(isRunning) {
-                 interval = setInterval(() => {
+                const interval = setInterval(() => {
                         setTimeLeft((prev) => (prev > 0 ? prev -1 : 0));
                     }, 1000)
-                     }  else {
-                             clearInterval(interval);
-                             } 
-            return() => clearInterval(interval);
-     }, [isRunning]);
+                                return() => clearInterval(interval);
+
+                     }  
+     }, [isRunning]); // typ en
 
         
         /* whenever you switch mode, reset timeLeft to the modes duration
@@ -56,7 +57,7 @@ export default function Home() {
 
         /*if the timer hits zero then we wait one second, and then we switch to the next mode
         i might wanna remove this. */ 
-        useEffect(() => {
+       /* useEffect(() => {
 
             if(timeLeft === 0) {
                 // audioRef.current.play();
@@ -67,8 +68,10 @@ export default function Home() {
             }
 
         }, [timeLeft])
+        */
 
 
+        /* räknar ut vilket mode du är på och går vidare till nästa */
         const switchMode = () => {
             const currentIndex = modes.indexOf(activeMode);
             const nextIndex =( currentIndex + 1 ) % modes.length;
@@ -78,20 +81,22 @@ export default function Home() {
         const totalTime = durations[activeMode];
         const progress = (timeLeft/ totalTime) * 100;
 
-        const color = () => {
-            if (progress > 50) return "#ff6b6b";
-            if ( progress > 25) return "oklch(0.7688 0.188 70.08)";
 
-            return "oklch(0.505 0.213 27.518)"
+        //ändrar färger beroende på vart i timern du är
+        const color = () => {
+            if (progress > 50) return "#883DC4";
+            if ( progress > 25) return "";
+
+            return "#940AOF"
         }
 
-        let seconds : string;
 
-        const formatTime = (seconds) => {
+        // tar sekunder ovh gör om det till MM:SS format
+        const formatTime = (seconds : number) => {
             const minutes = Math.floor( seconds / 60) ;
             const secs = seconds % 60;
 
-            return `${minutes} : ${secs < 10 ? "0" : ""}${secs}`;
+            return `${minutes} : ${secs < 10 ? "0" : ""}${secs}`; // wtf
         };
 
 
@@ -132,7 +137,7 @@ export default function Home() {
                         cx="50"
                         cy="50"
                         r="45"
-                        stroke="purple"
+                        stroke="#451970"
                         strokeWidth="5"
                         fill="none"
 
@@ -163,6 +168,29 @@ export default function Home() {
                     <div className="absolute text-5xl font-bold">{formatTime(timeLeft)}</div>
 
             </div>
+                            
+                    
+                    { /*
+                 <div className="mt-4 flex items-center space-x-2"> 
+                <input
+                    type="number"
+                    min = {1}
+                    value={Math.floor(timeLeft/ 60)}
+                    onChange={(e) => {
+                        const minutes = parseInt(e.target.value) || 0;
+                        setTimeLeft(minutes * 60);
+                        setDurations((prev) => ({...prev, [activeMode]: minutes * 60}));
+                    }}
+                    className="w-20 rounded border px-2 py-1 text-white"
+                    />
+                    <h1>Minutes </h1>
+                    
+            </div>
+                    */}
+                            
+
+
+
 
             <button 
             onClick={() => setIsRunning(!isRunning)}
