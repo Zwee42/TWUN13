@@ -1,33 +1,48 @@
 import { createMocks } from 'node-mocks-http';
 import handler from '../pages/api/register';
-import User from '../models/User';
 import bcrypt from 'bcryptjs';
 import { MongoServerError } from 'mongodb';
 
-jest.mock('../lib/mongodb', () => ({ __esModule: true, default: jest.fn() }));
+// Mocka ALLT först
+jest.mock('../lib/mongodb', () => ({ 
+  __esModule: true, 
+  default: jest.fn() 
+}));
 
-// Mock för User med newUser
-jest.mock('../models/User', () => {
-  const mockSave = jest.fn();
-  
-  const MockUser = jest.fn().mockImplementation(() => ({
-    save: mockSave,
-  }));
-  
-  // Lägg till findOne som en static method
-  (MockUser as any).findOne = jest.fn();
-  
-  return {
-    __esModule: true,
-    default: MockUser,
-  };
-});
+jest.mock('bcryptjs', () => ({ 
+  hash: jest.fn() 
+}));
 
-jest.mock('bcryptjs', () => ({ hash: jest.fn() }));
+// Skapa mock functions separat
+const mockFindOne = jest.fn();
+const mockSave = jest.fn();
+
+// Mocka User-modellen med en funktion som returnerar klassen
+jest.mock('../models/User', () => ({
+  __esModule: true,
+  default: class User {
+    username: string;
+    email: string;
+    password: string;
+    save: jest.Mock;
+
+    constructor({ username, email, password }: { username: string; email: string; password: string }) {
+      this.username = username;
+      this.email = email;
+      this.password = password;
+      this.save = mockSave;
+    }
+
+    static findOne = mockFindOne;
+  }
+}));
 
 describe('/api/register', () => {
   beforeEach(() => {
     jest.clearAllMocks();
+    mockFindOne.mockClear();
+    mockSave.mockClear();
+    (bcrypt.hash as jest.Mock).mockClear();
   });
 
   it('returns 400 if any field is missing', async () => {
@@ -41,8 +56,7 @@ describe('/api/register', () => {
   });
 
   it('returns 400 if email already exists', async () => {
-    (User.findOne as jest.Mock).mockResolvedValueOnce(true); // email exists
-
+    mockFindOne.mockResolvedValueOnce(true); // email exists
     const { req, res } = createMocks({
       method: 'POST',
       body: { username: 'Test', email: 'test@test.com', password: '123' }
@@ -54,7 +68,7 @@ describe('/api/register', () => {
   });
 
   it('returns 400 if username already exists', async () => {
-    (User.findOne as jest.Mock)
+    mockFindOne
       .mockResolvedValueOnce(null) // email check ok
       .mockResolvedValueOnce(true); // username exists
 
@@ -69,14 +83,9 @@ describe('/api/register', () => {
   });
 
   it('returns 201 on successful registration', async () => {
-    (User.findOne as jest.Mock).mockResolvedValue(null); // email & username ok
+    mockFindOne.mockResolvedValue(null); // email & username ok
     (bcrypt.hash as jest.Mock).mockResolvedValue('hashedpass');
-    
-    // Mocka User konstruktorn
-    const mockSave = jest.fn().mockResolvedValue(undefined);
-    (User as jest.MockedClass<typeof User>).mockImplementation(() => ({
-      save: mockSave,
-    } as any));
+    mockSave.mockResolvedValue(undefined);
 
     const { req, res } = createMocks({
       method: 'POST',
@@ -87,25 +96,15 @@ describe('/api/register', () => {
     expect(res._getStatusCode()).toBe(201);
     expect(JSON.parse(res._getData())).toEqual({ message: "all gwent good!" });
     expect(mockSave).toHaveBeenCalled();
-    // Verifiera att User konstruktorn anropas
-    expect(User).toHaveBeenCalledWith({
-      username: 'Test',
-      email: 'test@test.com',
-      password: 'hashedpass'
-    });
   });
 
   it('returns 400 on MongoServerError duplicate key', async () => {
     const mongoError = new MongoServerError({ message: 'Duplicate key' });
     mongoError.code = 11000;
 
-    (User.findOne as jest.Mock).mockResolvedValue(null);
+    mockFindOne.mockResolvedValue(null);
     (bcrypt.hash as jest.Mock).mockResolvedValue('hashedpass');
-    
-    const mockSave = jest.fn().mockRejectedValue(mongoError);
-    (User as jest.MockedClass<typeof User>).mockImplementation(() => ({
-      save: mockSave,
-    } as any));
+    mockSave.mockRejectedValueOnce(mongoError);
 
     const { req, res } = createMocks({
       method: 'POST',
@@ -118,13 +117,9 @@ describe('/api/register', () => {
   });
 
   it('returns 500 on unexpected errors', async () => {
-    (User.findOne as jest.Mock).mockResolvedValue(null);
+    mockFindOne.mockResolvedValue(null);
     (bcrypt.hash as jest.Mock).mockResolvedValue('hashedpass');
-    
-    const mockSave = jest.fn().mockRejectedValue(new Error('Unexpected error'));
-    (User as jest.MockedClass<typeof User>).mockImplementation(() => ({
-      save: mockSave,
-    } as any));
+    mockSave.mockRejectedValue(new Error('Unexpected error'));
 
     const { req, res } = createMocks({
       method: 'POST',

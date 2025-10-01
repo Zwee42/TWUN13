@@ -56,8 +56,12 @@ export default function NotesPage() {
         setTitle(note.title || "");
         setContent(note.content || "");
         setNoteId(note._id); // spara id när vi är i edit
-      } catch (err: any) {
-        setMessage(err.message);
+      } catch (err) {
+        if (err instanceof Error) {
+          setMessage(err.message);
+        } else {
+          setMessage("Unknown error");
+        }
       } finally {
         setLoading(false);
       }
@@ -102,8 +106,12 @@ export default function NotesPage() {
       setNoteId(savedNote._id); // spara id så vi kan dela direkt
       setMessage("Note saved successfully!");
       setIsSuccess(true);
-    } catch (err: any) {
-      setMessage(err.message);
+    } catch (err) {
+      if (err instanceof Error) {
+        setMessage(err.message);
+      } else {
+        setMessage("Unknown error");
+      }
       setIsSuccess(false);
     }
   }
@@ -124,8 +132,12 @@ export default function NotesPage() {
       setMessage("Note moved to trash");
       setIsSuccess(true);
       setTimeout(() => router.push("/notesList"), 1500);
-    } catch (err: any) {
-      setMessage(err.message);
+    } catch (err) {
+      if (err instanceof Error) {
+        setMessage(err.message);
+      } else {
+        setMessage("Unknown error");
+      }
       setIsSuccess(false);
     }
   }
@@ -157,9 +169,13 @@ export default function NotesPage() {
       setMessage(`Note shared with ${shareEmail}`);
       setIsSuccess(true);
       setShareEmail("");
-    } catch (err: any) {
+    } catch (err) {
+      if (err instanceof Error) {
+        setMessage(err.message);
+      } else {
+        setMessage("Unknown error");
+      }
       setIsSuccess(false);
-      setMessage(err.message);
     }
   }
 

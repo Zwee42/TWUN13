@@ -67,8 +67,12 @@ export default function NotesListPage() {
       setMessage("Note moved to trash successfully!");
       setIsSuccess(true);
       setTimeout(() => setMessage(""), 2000);
-    } catch (err: any) {
-      setMessage(err.message);
+    } catch (err) {
+      if (err instanceof Error) {
+        setMessage(err.message);
+      } else {
+        setMessage("Unknown error");
+      }
       setIsSuccess(false);
     }
   }

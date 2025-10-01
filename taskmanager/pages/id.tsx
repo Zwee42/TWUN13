@@ -37,9 +37,14 @@ export default function EditNotePage() {
                 const data: Note = await res.json();
                 setTitle(data.title || "");
                 setContent(data.content || "");
-            } catch (err: any) {
-                setMessage(err.message);
-            } finally {
+            } catch (err) {
+                if (err instanceof Error) {
+                  setMessage(err.message);
+                } else {
+                  setMessage("Unknown error");
+                }
+                setIsSuccess(false);
+              } finally {
                 setLoading(false);
             }
         };
@@ -64,9 +69,14 @@ export default function EditNotePage() {
             setMessage("Note updated successfully!");
             setIsSuccess(true);
             setTimeout(() => router.push("/notesList"), 1500);
-        } catch (err: any) {
-            setMessage(err.message);
-        }
+        } catch (err) {
+            if (err instanceof Error) {
+              setMessage(err.message);
+            } else {
+              setMessage("Unknown error");
+            }
+            setIsSuccess(false);
+          }
     }
 
     // Flytta till skräp
@@ -87,9 +97,14 @@ export default function EditNotePage() {
             setMessage("Moved successfully!");
             setIsSuccess(true);
             setTimeout(() => router.push("/notesList"), 1500);
-        } catch (err: any) {
-            setMessage(err.message);
-        }
+        }catch (err) {
+            if (err instanceof Error) {
+              setMessage(err.message);
+            } else {
+              setMessage("Unknown error");
+            }
+            setIsSuccess(false);
+          }
     }
 
     async function handleShare() {
@@ -111,10 +126,14 @@ export default function EditNotePage() {
             setMessage(`Note shared with ${shareEmail}`);
             setIsSuccess(true);
             setShareEmail("");
-        } catch (err: any) {
+        } catch (err) {
+            if (err instanceof Error) {
+              setMessage(err.message);
+            } else {
+              setMessage("Unknown error");
+            }
             setIsSuccess(false);
-            setMessage(err.message);
-        }
+          }
     }
 
     if (loading) {
@@ -154,11 +173,6 @@ export default function EditNotePage() {
                 <Link href="/notesList" passHref>
                     <button className="w-full bg-purple-800/80 hover:bg-purple-700 py-3 px-4 rounded-lg shadow-lg">
                         Notes list
-                    </button>
-                </Link>
-                <Link href="/index" passHref>
-                    <button className="w-full bg-purple-800/80 hover:bg-purple-700 py-3 px-4 rounded-lg shadow-lg">
-                        Settings
                     </button>
                 </Link>
 
