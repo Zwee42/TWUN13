@@ -43,7 +43,11 @@ export default async function handler(req: NextApiRequest, res:NextApiResponse) 
           }
       
           return res.status(405).json({ message: "Method not allowed" });
-        } catch (error: any) {
-          return res.status(500).json({ message: error.message });
+        } catch (error: unknown) {
+          if (error instanceof Error) {
+            return res.status(500).json({ message: error.message });
+          }
+          return res.status(500).json({ message: 'Unknown error' });
         }
+        
     }

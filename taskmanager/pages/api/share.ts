@@ -43,8 +43,10 @@ export default async function handler(
     return res
       .status(200)
       .json({ success: true, sharedWith: note.sharedWith });
-  } catch (err: any) {
-    console.error("Error sharing note:", err);
-    return res.status(500).json({ success: false, message: err.message });
-  }
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        console.error("Error sharing note:", err.message);
+        return res.status(500).json({ success: false, message: err.message });
+      }
+    }
 }
