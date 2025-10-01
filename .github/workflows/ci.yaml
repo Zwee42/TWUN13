@@ -12,7 +12,7 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
-      - names: Setup Nodejs
+      - name: Setup Nodejs
         uses: actions/setup-node@v3
         with:
           node-version: '18'
