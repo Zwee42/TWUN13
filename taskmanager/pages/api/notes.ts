@@ -25,7 +25,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
       let finalQuery: FilterQuery<typeof Note> = baseQuery;
 
-      // Om vi INTE ska inkludera borttagna anteckningar, lägg till isDeleted villkor
       if (!includeDeleted) {
         finalQuery = {
           $and: [

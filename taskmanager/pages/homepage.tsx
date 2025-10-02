@@ -4,7 +4,9 @@ export default function Home() {
     window.location.href = "/timer";
   };
 
-
+  const handleNote= () => {
+    window.location.href ="/notes"
+  } 
        const handleLogin = () => {
         window.location.href ="/login"
       } 
@@ -19,7 +21,7 @@ export default function Home() {
 
       <button
         onClick={handleTimerClick}
-        className="px-6 py-3 bg-purple-600 text-white font-semibold rounded-lg shadow-md hover:bg-purple-700 transition"
+        className="mb-4 px-6 py-3 bg-purple-600 text-white font-semibold rounded-lg shadow-md hover:bg-purple-700 transition"
       >
         Timer
       </button>
@@ -27,15 +29,15 @@ export default function Home() {
 
 
      <button
-        onClick={handleTimerClick}
-        className="px-6 py-3 bg-purple-600 text-white font-semibold rounded-lg shadow-md hover:bg-purple-700 transition"
+        onClick={handleNote}
+        className="mb-4 px-6 py-3 bg-purple-600 text-white font-semibold rounded-lg shadow-md hover:bg-purple-700 transition"
       >
-        notes/documentation
+        Notes
       </button>
 
        <button
         onClick={handleTimerClick}
-        className="px-6 py-3 bg-purple-600 text-white font-semibold rounded-lg shadow-md hover:bg-purple-700 transition"
+        className="mb-4 px-6 py-3 bg-purple-600 text-white font-semibold rounded-lg shadow-md hover:bg-purple-700 transition"
       >
         collaboration
       </button>
