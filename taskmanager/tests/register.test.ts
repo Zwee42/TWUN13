@@ -9,14 +9,19 @@ jest.mock('../lib/mongodb', () => ({ __esModule: true, default: jest.fn() }));
 // Mock för User med newUser
 jest.mock('../models/User', () => {
   const mockSave = jest.fn();
-  
-  const MockUser = jest.fn().mockImplementation(() => ({
-    save: mockSave,
-  }));
-  
+
+  const MockUser = jest.fn().mockImplementation(
+    ({ username, email, password }: { username: string; email: string; password: string }) => ({
+      username,
+      email,
+      password,
+      save: mockSave,
+    })
+  );
+
   // Lägg till findOne som en static method
-  (MockUser as any).findOne = jest.fn();
-  
+  (MockUser as unknown as { findOne: jest.Mock }).findOne = jest.fn();
+
   return {
     __esModule: true,
     default: MockUser,
@@ -71,12 +76,21 @@ describe('/api/register', () => {
   it('returns 201 on successful registration', async () => {
     (User.findOne as jest.Mock).mockResolvedValue(null); // email & username ok
     (bcrypt.hash as jest.Mock).mockResolvedValue('hashedpass');
-    
+
     // Mocka User konstruktorn
     const mockSave = jest.fn().mockResolvedValue(undefined);
-    (User as jest.MockedClass<typeof User>).mockImplementation(() => ({
-      save: mockSave,
-    } as any));
+    (User as jest.MockedClass<typeof User>).mockImplementation(
+      (doc?: unknown) => {
+        const { username, email, password } = doc as { username: string; email: string; password: string };
+        return {
+          username,
+          email,
+          password,
+          save: mockSave,
+        };
+      }
+    );
+
 
     const { req, res } = createMocks({
       method: 'POST',
@@ -101,11 +115,19 @@ describe('/api/register', () => {
 
     (User.findOne as jest.Mock).mockResolvedValue(null);
     (bcrypt.hash as jest.Mock).mockResolvedValue('hashedpass');
-    
+
     const mockSave = jest.fn().mockRejectedValue(mongoError);
-    (User as jest.MockedClass<typeof User>).mockImplementation(() => ({
-      save: mockSave,
-    } as any));
+    (User as jest.MockedClass<typeof User>).mockImplementation(
+      (doc?: unknown) => {
+        const { username, email, password } = doc as { username: string; email: string; password: string };
+        return {
+          username,
+          email,
+          password,
+          save: mockSave,
+        };
+      }
+    );
 
     const { req, res } = createMocks({
       method: 'POST',
@@ -120,11 +142,19 @@ describe('/api/register', () => {
   it('returns 500 on unexpected errors', async () => {
     (User.findOne as jest.Mock).mockResolvedValue(null);
     (bcrypt.hash as jest.Mock).mockResolvedValue('hashedpass');
-    
+
     const mockSave = jest.fn().mockRejectedValue(new Error('Unexpected error'));
-    (User as jest.MockedClass<typeof User>).mockImplementation(() => ({
-      save: mockSave,
-    } as any));
+    (User as jest.MockedClass<typeof User>).mockImplementation(
+      (doc?: unknown) => {
+        const { username, email, password } = doc as { username: string; email: string; password: string };
+        return {
+          username,
+          email,
+          password,
+          save: mockSave,
+        };
+      }
+    );
 
     const { req, res } = createMocks({
       method: 'POST',
