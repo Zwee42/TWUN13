@@ -5,7 +5,7 @@ import {motion} from "framer-motion";
 import { Mode } from "fs";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-"use client" // säger till Next.js that detta är bara till för de som använder sidan.
+"use Client" // säger till Next.js that detta är bara till för de som använder sidan.
             // finns ingenting på servern som görs
 
 
