@@ -46,8 +46,13 @@ useEffect(() => {
         const deletedNotes = data.filter((n) => n.isDeleted === true);
         setNotes(deletedNotes);
         
-      } catch (err: any) {
-        setMessage(err.message);
+      } catch (err) {
+        if (err instanceof Error) {
+          setMessage(err.message);
+        } else {
+          setMessage("Unknown error");
+        }
+        setIsSuccess(false);
       } finally {
         setLoading(false);
       }
@@ -71,8 +76,12 @@ useEffect(() => {
       setMessage("Note restored successfully!");
       setIsSuccess(true);
       setTimeout(() => setMessage(""), 2000);
-    } catch (err: any) {
-      setMessage(err.message);
+    } catch (err) {
+      if (err instanceof Error) {
+        setMessage(err.message);
+      } else {
+        setMessage("Unknown error");
+      }
       setIsSuccess(false);
     }
   }
@@ -91,8 +100,12 @@ useEffect(() => {
       setMessage("Note permanently deleted");
       setIsSuccess(true);
       setTimeout(() => setMessage(""), 2000);
-    } catch (err: any) {
-      setMessage(err.message);
+    } catch (err) {
+      if (err instanceof Error) {
+        setMessage(err.message);
+      } else {
+        setMessage("Unknown error");
+      }
       setIsSuccess(false);
     }
   }
