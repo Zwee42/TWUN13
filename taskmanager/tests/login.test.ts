@@ -25,7 +25,7 @@ describe('/api/login', () => {
     const { req, res } = createMocks({ method: 'POST', body: { email: 'test@test.com' } });
     await handler(req, res);
     expect(res._getStatusCode()).toBe(400);
-    expect(JSON.parse(res._getData())).toEqual({ message: "u missed a feild?" });
+    expect(JSON.parse(res._getData())).toEqual({ message: "u missed a feild" });
   });
 
   it('returns 400 if user not found', async () => {
