@@ -20,7 +20,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         console.log("login försök:", {email, password});
 
         if (!email || !password) {
-            return res.status(400).json({message: "u missed a feild?"});
+            return res.status(400).json({message: "u missed a feild"});
 
         }
 

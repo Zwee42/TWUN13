@@ -19,7 +19,7 @@ export default async function handler(req: NextApiRequest, res:NextApiResponse) 
       return res.status(200).json(note);
         }
         if (method === "PUT") {
-            // Full update (title + content)
+            
             const { title, content } = req.body;
             if (!title) return res.status(400).json({ message: "Title is required" });
       
