@@ -29,6 +29,7 @@ export function NoteContent({ note, handleMoveToTrash }: { note: Note, handleMov
       )}
 
       <div
+
         className={"mt-2 p-4 border border-purple-700 rounded-xl bg-black/50 max-w-none flex-1 min-h-[20vh] overflow-y-hidden transition-all duration-300" }
       >
         <div className={"prose prose-invert" + (expanded ? "" : " overflow-scroll h-[27vh] ")}>
