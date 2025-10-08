@@ -19,7 +19,7 @@ export default function TrashPage() {
   const [message, setMessage] = useState("");
   const [isSuccess, setIsSuccess] = useState(false);
 
-  // Hämta traschade anteckningar
+ 
   // Hämta traschade anteckningar
 useEffect(() => {
     async function fetchTrash() {
