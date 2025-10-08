@@ -20,7 +20,7 @@ export default function Home() {
     const [showSetting, setShowSettings] = useState(false); // tror ej jag kommer använda denna
     const [durations, setDurations] = useState<Record<Mode, number>> ({
         Timer: 25 * 60,
-        "short break": 1 * 60,
+        "short break": 10 * 60,
         "long break": 15 * 60,
     }) // sparar hur långa alla mode är i sekunder
 

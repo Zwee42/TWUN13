@@ -11,15 +11,17 @@
   "dependencies": {
     "@uiw/react-markdown-preview": "^5.1.5",
     "@uiw/react-md-editor": "^4.0.8",
+    "bcryptjs": "^3.0.2",
+    "framer-motion": "^12.23.22",
     "katex": "^0.16.22",
+    "markdown": "^0.5.0",
     "mongoose": "^8.18.1",
     "next": "15.5.2",
     "react": "19.1.0",
     "react-dom": "19.1.0",
     "react-markdown": "^10.1.0",
     "rehype-katex": "^7.0.1",
-    "remark-math": "^6.0.0",
-    "bcryptjs": "^3.0.2"
+    "remark-math": "^6.0.0"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
