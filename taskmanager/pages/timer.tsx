@@ -2,7 +2,9 @@
 // glöm inte att fixa audio till timern
 import { useEffect, useState } from "react";
 import {motion} from "framer-motion";
+import { Mode } from "fs";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-expressions
 "use Client" // säger till Next.js that detta är bara till för de som använder sidan.
             // finns ingenting på servern som görs
 
@@ -17,10 +19,10 @@ export default function Home() {
 
     const [timeLeft, setTimeLeft] = useState(25 * 60); // har koll på hur många sekunder jag har kvar 
     const [isRunning, setIsRunning] = useState(false); // är timern på eller av?
-    const [showSetting, setShowSettings] = useState(false); // tror ej jag kommer använda denna
-    const [durations, setDurations] = useState<Record<Mode, number>> ({
+    // const [showSetting, setShowSettings] = useState(false); // tror ej jag kommer använda denna
+    const [durations] = useState<Record<Mode, number>> ({
         Timer: 25 * 60,
-        "short break": 10 * 60,
+        "short break": 1 * 60,
         "long break": 15 * 60,
     }) // sparar hur långa alla mode är i sekunder
 
@@ -72,11 +74,11 @@ export default function Home() {
 
 
         /* räknar ut vilket mode du är på och går vidare till nästa */
-        const switchMode = () => {
-            const currentIndex = modes.indexOf(activeMode);
-            const nextIndex =( currentIndex + 1 ) % modes.length;
-            setActiveMode(modes[nextIndex]);
-        }
+        // const switchMode = () => {
+        //     const currentIndex = modes.indexOf(activeMode);
+        //     const nextIndex =( currentIndex + 1 ) % modes.length;
+        //     setActiveMode(modes[nextIndex]);
+        // }
 
         const totalTime = durations[activeMode];
         const progress = (timeLeft/ totalTime) * 100;
@@ -199,7 +201,6 @@ export default function Home() {
                 {isRunning ? "PAUSE" : "START"}
                     
             </button>
-
             
                  
         

@@ -8,7 +8,7 @@ export default function Home() {
 
   const handleLogin = async () => {
     if (!email || !password) {
-      alert("ehm, please fill in all fields.......?.");
+      alert("Please fill in all fields");
       return;
     }
 
@@ -22,12 +22,12 @@ export default function Home() {
 
 
       const data = await res.json();
-      console.log("Response from backedn", data);
+      console.log("Response from backed", data);
 
       if (res.ok) {
         localStorage.setItem("user", JSON.stringify(data.user));
-        alert("login succeflul, woo ");
-        window.location.href = "/notesList"
+        alert("login succeflul");
+        window.location.href = "/homepage"
       } else {
         alert(data.message || "login failed ")
       }
@@ -35,7 +35,7 @@ export default function Home() {
 
     } catch (err) {
       console.error("error conncetiong to backend", err);
-      alert("something went wrong :3");
+      alert("something went wrong");
     }
 
 

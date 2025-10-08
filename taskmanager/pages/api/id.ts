@@ -19,7 +19,7 @@ export default async function handler(req: NextApiRequest, res:NextApiResponse) 
       return res.status(200).json(note);
         }
         if (method === "PUT") {
-            // Full update (title + content)
+            
             const { title, content } = req.body;
             if (!title) return res.status(400).json({ message: "Title is required" });
       
@@ -43,7 +43,11 @@ export default async function handler(req: NextApiRequest, res:NextApiResponse) 
           }
       
           return res.status(405).json({ message: "Method not allowed" });
-        } catch (error: any) {
-          return res.status(500).json({ message: error.message });
+        } catch (err) {
+          if (err instanceof Error) {
+            return res.status(500).json({ message: err.message });
+          }
+          return res.status(500).json({ message: "Unknown error" });
         }
+        
     }

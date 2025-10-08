@@ -3,7 +3,6 @@ import ReactMarkdown from "react-markdown";
 import remarkMath from "remark-math";
 import rehypeKatex from "rehype-katex";
 import Link from "next/link";
-import { useRouter } from "next/router";
 
 type Note = {
   _id: string;
@@ -14,7 +13,6 @@ type Note = {
 };
 
 export default function NotesListPage() {
-  const router = useRouter();
   const [notes, setNotes] = useState<Note[]>([]);
   const [loading, setLoading] = useState(true);
   const [message, setMessage] = useState("");
@@ -67,8 +65,12 @@ export default function NotesListPage() {
       setMessage("Note moved to trash successfully!");
       setIsSuccess(true);
       setTimeout(() => setMessage(""), 2000);
-    } catch (err: any) {
-      setMessage(err.message);
+    } catch (err) {
+      if (err instanceof Error) {
+        setMessage(err.message);
+      } else {
+        setMessage("Unknown error");
+      }
       setIsSuccess(false);
     }
   }
