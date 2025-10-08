@@ -4,6 +4,12 @@ import dbConnect from "@/lib/mongodb";
 import User from "@/models/User"
 import bcrypt from "bcryptjs";
 
+
+import jwt from "jsonwebtoken";
+import cookie from "cookie";
+
+const SECRET = process.env.JWT_SECRET || "supersecret"; // moe to env file
+
 // async????
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
 
@@ -36,6 +42,27 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             if(!isMatch) {
                     return res.status(400).json({message: "haha, wrong password"});
                 }
+
+
+                const token = jwt.sign(
+                    {
+                        userId: user._id, email:user.email 
+                    },
+                    SECRET,
+                    {expiresIn: "1d" }
+                );
+
+
+                res.setHeader(
+                    "Set-Cookie",
+                    cookie.serialize("token", token, {
+                        httpOnly: true,
+                        secure: process.env.NODE_ENV === "production",
+                        sameSite: "strict",
+                        maxAge: 60*60*24,
+                        path: "/",
+                    })
+                );
 
             return res.status(200).json({
                 message: "Login succeful?? yay",
