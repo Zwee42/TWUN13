@@ -8,7 +8,7 @@ import rehypeKatex from "rehype-katex";
 
 import { requireAuth } from "@/lib/auth";
 
-import { GetServerSideProps, GetServerSidePropsContext } from "next";
+import { GetServerSideProps } from "next";
 
      export const getServerSideProps: GetServerSideProps = async (ctx) => {
             

@@ -1,8 +1,8 @@
   
 export interface SessionUser {
     
-  email: String;
-  username: String;
+  email: string;
+  username: string;
 
 
   }

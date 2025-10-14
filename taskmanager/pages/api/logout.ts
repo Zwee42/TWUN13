@@ -1,11 +1,8 @@
 
 import type { NextApiRequest, NextApiResponse } from "next";
-import dbConnect from "@/lib/mongodb";
-import User from "@/models/User"
-import bcrypt from "bcryptjs";
+
 import {serialize} from "cookie";
-import jwt from "jsonwebtoken";
-import cookie from "cookie";
+
 
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {

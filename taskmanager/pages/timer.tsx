@@ -4,9 +4,9 @@ import { useEffect, useState } from "react";
 import {motion} from "framer-motion";
 import { Mode } from "fs";
 import {requireAuth} from '@/lib/auth';
-import { GetServerSideProps, GetServerSidePropsContext } from "next";
+import { GetServerSideProps } from "next";
 
-// eslint-disable-next-line @typescript-eslint/no-unused-expressions
+
 // säger till Next.js that detta är bara till för de som använder sidan.
 // finns ingenting på servern som görs
 

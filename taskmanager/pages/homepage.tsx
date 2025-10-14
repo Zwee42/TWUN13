@@ -1,13 +1,13 @@
 import { requireAuth } from '@/lib/auth';
 //import {SessionUser} from '@/models/sessionUser';
 //import User, {IUser} from '@/models/User';
-import { GetServerSideProps, GetServerSidePropsContext } from "next";
+import { GetServerSideProps } from "next";
 import { SessionUser } from '@/types/SessionUser';
 
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
 
-  return await requireAuth(ctx) || { redirect: { destination: '/login', permanent: false } };
+  return await requireAuth(ctx) || { redirect: { destination: "/login", permanent: false } };
 
 };
  // import cookies
@@ -32,7 +32,7 @@ export default function Home({ user }: { user: SessionUser }) {
   const handleLogout = async () => {
 
         try {
-      const res = await fetch("/api/logout", {
+       await fetch("/api/logout", {
 
       })
     } catch (err) {
@@ -54,7 +54,7 @@ export default function Home({ user }: { user: SessionUser }) {
       </h1>
 
       <h1 className="text font-bold text-grey mb-8 drop-shadow-lg">
-        Ctrl + S your energy, we're working smart!
+        Ctrl + S your energy, we are working smart!
       </h1>
 
       <button

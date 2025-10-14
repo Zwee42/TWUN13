@@ -7,7 +7,7 @@ import {serialize} from "cookie";
 
 
 import jwt from "jsonwebtoken";
-import cookie from "cookie";
+// import cookie from "cookie";
 
 const SECRET = process.env.JWT_SECRET || "supersecret"; // move to env file
 

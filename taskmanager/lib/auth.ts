@@ -3,7 +3,7 @@ import jwt from 'jsonwebtoken';
 
 import { SessionUser } from '@/types/SessionUser';
 
-import { execOnce, NextApiResponse } from 'next/dist/shared/lib/utils';
+import { NextApiResponse } from 'next/dist/shared/lib/utils';
 import { IUser } from '@/models/User';
 import { serialize } from 'cookie';
 
