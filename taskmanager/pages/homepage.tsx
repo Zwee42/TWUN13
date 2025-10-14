@@ -71,7 +71,6 @@ export default function Home({ user }: { user: SessionUser }) {
       </button>
 
         collaboration
-      </button>
      <button
         onClick={handleDashboard}
         className="mb-4 px-6 py-3 bg-purple-600 text-white font-semibold rounded-lg shadow-md hover:bg-purple-700 transition"
