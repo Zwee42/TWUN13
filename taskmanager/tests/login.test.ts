@@ -25,7 +25,7 @@ describe('/api/login', () => {
     const { req, res } = createMocks({ method: 'POST', body: { email: 'test@test.com' } });
     await handler(req, res);
     expect(res._getStatusCode()).toBe(400);
-    expect(JSON.parse(res._getData())).toEqual({ message: "u missed a feild?" });
+    expect(JSON.parse(res._getData())).toEqual({ message: "please fill in all feilds" });
   });
 
   it('returns 400 if user not found', async () => {
@@ -44,7 +44,7 @@ describe('/api/login', () => {
     const { req, res } = createMocks({ method: 'POST', body: { email: 'test@test.com', password: 'wrong' } });
     await handler(req, res);
     expect(res._getStatusCode()).toBe(400);
-    expect(JSON.parse(res._getData())).toEqual({ message: "haha, wrong password" });
+    expect(JSON.parse(res._getData())).toEqual({ message: "wrong password" });
   });
 
   it('returns 200 on successful login', async () => {
@@ -55,7 +55,7 @@ describe('/api/login', () => {
     await handler(req, res);
     expect(res._getStatusCode()).toBe(200);
     expect(JSON.parse(res._getData())).toEqual({
-      message: "Login succeful?? yay",
+      message: "Login succeful",
       user: { username: 'Test', email: 'test@test.com' }
     });
   });

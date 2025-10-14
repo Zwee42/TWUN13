@@ -1,16 +1,19 @@
 import { useEffect, useState } from "react";
-import ReactMarkdown from "react-markdown";
-import remarkMath from "remark-math";
-import rehypeKatex from "rehype-katex";
 import Link from "next/link";
+import { Note, NoteContent} from "@/components/NoteCompontent";
 
-type Note = {
-  _id: string;
-  title: string;
-  content: string;
-  createdAt: string;
-  sharedWith?: string[];
-};
+
+import { requireAuth } from "@/lib/auth";
+
+import { GetServerSideProps } from "next";
+
+     export const getServerSideProps: GetServerSideProps = async (ctx) => {
+            
+              return await requireAuth(ctx) || {redirect: { destination: '/login', permanent: false }};
+            
+            };
+
+
 
 export default function NotesListPage() {
   const [notes, setNotes] = useState<Note[]>([]);
@@ -48,7 +51,7 @@ export default function NotesListPage() {
   
 
   // Flytta anteckning till skräp
-  async function handleMoveToTrash(noteId: string) {
+   async function handleMoveToTrash(noteId: string) {
     const confirmMove = confirm("Move this note to Trash?");
     if (!confirmMove) return;
 
@@ -109,43 +112,9 @@ export default function NotesListPage() {
               key={note._id}
               className="border border-purple-700 rounded-2xl p-5 bg-black/70 shadow-lg flex flex-col"
             >
-              <h3 className="font-bold text-lg text-purple-300 mb-2">
-                {note.title}
-              </h3>
 
-              {/* 👇 Visa om anteckningen är delad */}
-              {note.sharedWith && note.sharedWith.length > 0 && (
-                <p className="text-sm text-blue-400 mb-2">Shared with you</p>
-              )}
+              <NoteContent note={note} handleMoveToTrash={handleMoveToTrash} />
 
-              <div className="mt-2 p-4 border border-purple-700 rounded-xl bg-black/50 prose prose-invert max-w-none break-words flex-1">
-                <ReactMarkdown
-                  remarkPlugins={[remarkMath]}
-                  rehypePlugins={[rehypeKatex]}
-                >
-                  {note.content}
-                </ReactMarkdown>
-              </div>
-
-              <span className="text-xs text-gray-400 mt-2">
-                {new Date(note.createdAt).toLocaleString()}
-              </span>
-
-              <div className="flex gap-2 mt-3">
-                {/* Edit-knapp skickar till id.tsx */}
-                <Link href={`/id?id=${note._id}`}>
-                  <button className="bg-purple-700 px-3 py-1 rounded-lg hover:bg-purple-600 shadow">
-                    Edit
-                  </button>
-                </Link>
-
-                <button
-                  onClick={() => handleMoveToTrash(note._id)}
-                  className="bg-red-600 px-3 py-1 rounded-lg hover:bg-red-500 shadow"
-                >
-                  Delete
-                </button>
-              </div>
             </li>
           ))}
         </ul>

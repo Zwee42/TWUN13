@@ -8,7 +8,7 @@ export default function Home() {
 
   const handleLogin = async () => {
     if (!email || !password) {
-      alert("ehm, please fill in all fields.......?.");
+      alert("Please fill in all fields");
       return;
     }
 
@@ -22,12 +22,12 @@ export default function Home() {
 
 
       const data = await res.json();
-      console.log("Response from backedn", data);
+      console.log("Response from backed", data);
 
       if (res.ok) {
         localStorage.setItem("user", JSON.stringify(data.user));
-        alert("login succeflul, woo ");
-        window.location.href = "/notesList"
+        alert("login succeflul");
+        window.location.href = "/homepage"
       } else {
         alert(data.message || "login failed ")
       }
@@ -35,7 +35,7 @@ export default function Home() {
 
     } catch (err) {
       console.error("error conncetiong to backend", err);
-      alert("something went wrong :3");
+      alert("something went wrong");
     }
 
 
@@ -44,6 +44,28 @@ export default function Home() {
   const handleSignUp = () => {
     window.location.href = "/register";
   };
+
+  const handleForgotPassword = async () => {
+    const email = prompt("Enter your email address:");
+    if (!email) return;
+
+    const res = await fetch('/api/forgotPassword', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ email }),
+    });
+
+    const data = await res.json();
+
+    if (res.ok) {
+      alert("Password reset link has been sent to your email.");
+    } else {
+      alert("Error: " + data.error);
+    }
+  };
+
 
   return (
 
@@ -84,6 +106,16 @@ export default function Home() {
         >
           Don’t have an account? Register
         </button>
+        
+        <div className="mt-6 text-center text-gray-400">
+          <label className="text-lg">Forgot your password?</label>
+          <button
+            onClick={handleForgotPassword}
+            className="text-lg text-[#00bfff] hover:underline"
+          >
+            Reset it!
+          </button>
+        </div>
       </div>
     </div>
   );

@@ -3,15 +3,26 @@
 import { useEffect, useState } from "react";
 import {motion} from "framer-motion";
 import { Mode } from "fs";
+import {requireAuth} from '@/lib/auth';
+import { GetServerSideProps } from "next";
 
-// eslint-disable-next-line @typescript-eslint/no-unused-expressions
-"use Client" // säger till Next.js that detta är bara till för de som använder sidan.
-            // finns ingenting på servern som görs
-
+// säger till Next.js that detta är bara till för de som använder sidan.
+// finns ingenting på servern som görs
+            
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+            return await requireAuth(ctx) || {redirect: { destination: '/login', permanent: false }};
+          };
 
 
 
 export default function Home() {
+
+
+
+    const handleReturn = () => {
+        window.location.href = "/homepage"
+    }
+
 
     // settting = to after the different modes is the default state
     const [activeMode, setActiveMode] = useState("Timer"); // acriveMode sparar den mode jag är i
@@ -202,6 +213,12 @@ export default function Home() {
                     
             </button>
 
+             <button
+        onClick={handleReturn}
+        className="mt-8 px-3 py-3 bg-purple-600 text-white font-semibold rounded-lg shadow-md hover:bg-purple-700 transition"
+      >
+        return
+      </button>
             
                  
         
