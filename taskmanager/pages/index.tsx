@@ -8,9 +8,7 @@ export default function Home() {
     window.location.href = "/login";
   };
 
-  const handleDashboard = () => {
-    window.location.href = "/dashboard";
-  };
+
 
   return (
     <main className="relative w-full h-screen overflow-hidden bg-gradient-to-br from-purple-900 via-black to-black">
@@ -33,13 +31,6 @@ export default function Home() {
           className="w-40 mb-4 py-3 bg-purple-600 text-white font-semibold rounded-lg shadow-md hover:bg-purple-700 transition"
         >
           Register
-        </button>
-
-        <button
-          onClick={handleDashboard}
-          className="w-40 py-3 bg-purple-600 text-white font-semibold rounded-lg shadow-md hover:bg-purple-700 transition"
-        >
-          Todo Dashboard
         </button>
       </div>
     </main>

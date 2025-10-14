@@ -228,7 +228,7 @@ const Dashboard: React.FC = () => {
                     : 'bg-purple-800/50 text-purple-200 hover:bg-purple-700/50'
                 }`}
               >
-                <Image src="/calendar-icon.png" alt="Calendar" className="w-4 h-4 inline mr-2" />
+                <Image src="/calendar-icon.png" alt="Calendar" className="w-4 h-4 inline mr-2" width={200} height={200} />
                 Calendar
               </button>
               <button
@@ -239,7 +239,7 @@ const Dashboard: React.FC = () => {
                     : 'bg-purple-800/50 text-purple-200 hover:bg-purple-700/50'
                 }`}
               >
-                <Image src="/white-todo-icon.png" alt="All Todos" className="w-4 h-4 inline mr-2" />
+                <Image src="/white-todo-icon.png" alt="All Todos" className="w-4 h-4 inline mr-2" width={200} height={200} />
                 All Todos
               </button>
               <button
