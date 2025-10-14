@@ -15,7 +15,7 @@ const SECRET = process.env.JWT_SECRET || "supersecret"; // move to env file
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
 
     if (req.method !== "POST") {
-        return res.status(405).json({message:"onLY post requests allowed"});
+        return res.status(405).json({message:"only post requests allowed"});
 
     }
 
@@ -27,7 +27,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         console.log("login försök:", {email, password});
 
         if (!email || !password) {
-            return res.status(400).json({message: "u missed a feild"});
+            return res.status(400).json({message: "please fill in all feilds"});
 
         }
             const user = await User.findOne({email});
@@ -62,10 +62,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                      res.setHeader("Set-Cookie", cookie);
 
 
-                     
+
 
             return res.status(200).json({
-                message: "Login succeful?? yay",
+                message: "Login succeful",
                 user: {username: user.name, email: user.email}
             })
 
