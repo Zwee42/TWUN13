@@ -3,6 +3,17 @@ import Link from "next/link";
 import ReactMarkdown from "react-markdown";
 import remarkMath from "remark-math";
 import rehypeKatex from "rehype-katex";
+import { requireAuth } from "@/lib/auth";
+
+import { GetServerSideProps, GetServerSidePropsContext } from "next";
+
+     export const getServerSideProps: GetServerSideProps = async (ctx) => {
+            
+              return await requireAuth(ctx) || {redirect: { destination: '/login', permanent: false }};
+            
+            };
+
+
 
 type Note = {
   _id: string;

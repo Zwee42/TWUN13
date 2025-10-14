@@ -3,12 +3,13 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import dbConnect from "@/lib/mongodb";
 import User from "@/models/User"
 import bcrypt from "bcryptjs";
+import {serialize} from "cookie";
 
 
 import jwt from "jsonwebtoken";
 import cookie from "cookie";
 
-const SECRET = process.env.JWT_SECRET || "supersecret"; // moe to env file
+const SECRET = process.env.JWT_SECRET || "supersecret"; // move to env file
 
 // async????
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
@@ -37,29 +38,31 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             const isMatch = await bcrypt.compare(password, user.password);
                
             if(!isMatch) {
-                    return res.status(400).json({message: "haha, wrong password"});
+                    return res.status(400).json({message: "wrong password"});
                 }
 
 
                 const token = jwt.sign(
                     {
-                        userId: user._id, email:user.email 
+                        email:user.email, username: user.username
                     },
                     SECRET,
-                    {expiresIn: "1d" }
+                    {expiresIn: "1h" }
                 );
 
 
-                res.setHeader(
-                    "Set-Cookie",
-                    cookie.serialize("token", token, {
-                        httpOnly: true,
-                        secure: process.env.NODE_ENV === "production",
-                        sameSite: "strict",
-                        maxAge: 60*60*24,
-                        path: "/",
-                    })
-                );
+                 const cookie = serialize ("auth_token", token,  { // textblob = serilaze
+                         httpOnly: true, // man kan inte redigera med javaskrcip
+                         secure: process.env.NODE_ENV === "production", // encryptera kakan dubbel encypted
+                         sameSite: "strict", // bara våran hemsida som kan använda kakan
+                         maxAge: 40, // hur lång tid kakan håller i s
+                         path: "/", // vilka ställen man har timern på 
+                     }) ;
+
+                     res.setHeader("Set-Cookie", cookie);
+
+
+                     
 
             return res.status(200).json({
                 message: "Login succeful?? yay",
