@@ -10,7 +10,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   return await requireAuth(ctx) || { redirect: { destination: '/login', permanent: false } };
 
 };
-
+ // import cookies
 
 
 
@@ -63,7 +63,6 @@ export default function Home({ user }: { user: SessionUser }) {
       >
         Timer
       </button>
-
 
 
       <button
