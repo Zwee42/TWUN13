@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { Note, NoteContent} from "@/components/NoteCompontent";
+import { Note, NoteContent} from "@/components/NoteComponent";
 
 
 import { requireAuth } from "@/lib/auth";
