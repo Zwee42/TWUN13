@@ -42,45 +42,46 @@ export default function Home({ user }: { user: SessionUser }) {
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-br from-black via-purple-950 to-black">
-      <h1 className="text-4xl font-bold text-white mb-8 drop-shadow-lg">
-        Welcome {user.username}!
-      </h1>
-
-      <h1 className="text font-bold text-grey mb-8 drop-shadow-lg">
-        Ctrl + S your energy, we are working smart!
-      </h1>
-
-      <button
-        onClick={handleTimerClick}
-        className="mb-4 px-13 py-3 bg-purple-600 text-white font-semibold rounded-lg shadow-md hover:bg-purple-700 transition"
-      >
-        Timer
-      </button>
-
-
-      <button
-        onClick={handleNote}
-        className="mb-4 px-13 py-3 bg-purple-600 text-white font-semibold rounded-lg shadow-md hover:bg-purple-700 transition"
-      >
-        Notes
-      </button>
-
-       
-     <button
-        onClick={handleDashboard}
-        className="mb-4 px-6 py-3 bg-purple-600 text-white font-semibold rounded-lg shadow-md hover:bg-purple-700 transition"
-      >
-        Todo Dashboard
-      </button>
-      <button
-        onClick={handleLogout}
-        className="px-6 py-3 bg-black text-white font-semibold rounded-lg shadow-md hover:bg-purple-700 transition"
-      >
-        Back to login
-      </button>
-
- 
-
+      <div className="bg-black/70 p-10 rounded-2xl shadow-2xl w-[28rem] text-center">
+        <h1 className="text-4xl font-bold text-purple-400 mb-6 drop-shadow-lg">
+          Welcome {user.username}!
+        </h1>
+  
+        <h2 className="text-lg font-medium text-gray-300 mb-8 drop-shadow-md">
+          Ctrl + S your energy, we are working smart!
+        </h2>
+  
+        <div className="flex flex-col space-y-4">
+          <button
+            onClick={handleTimerClick}
+            className="w-full py-3 bg-purple-900 text-white font-semibold rounded-lg shadow-md hover:bg-black transition"
+          >
+            Timer
+          </button>
+  
+          <button
+            onClick={handleNote}
+            className="w-full py-3 bg-purple-900 text-white font-semibold rounded-lg shadow-md hover:bg-black transition"
+          >
+            Notes
+          </button>
+  
+          <button
+            onClick={handleDashboard}
+            className="w-full py-3 bg-purple-900 text-white font-semibold rounded-lg shadow-md hover:bg-black transition"
+          >
+            Todo Dashboard
+          </button>
+  
+          <button
+            onClick={handleLogout}
+            className="w-full py-3 bg-black text-purple-400 font-semibold rounded-lg shadow-md hover:bg-purple-900 transition"
+          >
+            Back to Login
+          </button>
+        </div>
+      </div>
     </div>
-  );
+  );  
+  
 }
