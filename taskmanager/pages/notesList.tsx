@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { Note, NoteContent} from "@/components/NoteComponent";
 
-
 import { requireAuth } from "@/lib/auth";
 
 import { GetServerSideProps } from "next";
@@ -80,14 +79,28 @@ export default function NotesListPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-black via-purple-950 to-black text-white p-10">
-      <div className="flex justify-between items-center mb-8">
-        <h1 className="text-3xl font-bold text-purple-300">Notes list</h1>
-        <Link href="/notes">
-          <button className="bg-purple-700 px-4 py-2 rounded-xl hover:bg-purple-600 shadow-md">
-            New Note
-          </button>
-        </Link>
-      </div>
+  <div className="flex justify-between items-center mb-8">
+    <h1 className="text-3xl font-bold text-purple-400">Notes List</h1>
+
+    <div className="flex space-x-4">
+      <Link href="/notes">
+        <button className="bg-purple-900 w-32 py-3 text-white font-semibold rounded-lg shadow-md hover:bg-black transition">
+          Create Note
+        </button>
+      </Link>
+
+      <Link href="/homepage">
+        <button className="bg-purple-900 w-32 py-3 text-white font-semibold rounded-lg shadow-md hover:bg-black transition">
+          Home
+        </button>
+      </Link>
+      <Link href="/trash">
+        <button className="bg-purple-900 w-32 py-3 text-white font-semibold rounded-lg shadow-md hover:bg-black transition">
+          Trash
+        </button>
+      </Link>
+    </div>
+  </div>
 
       {message && (
         <div

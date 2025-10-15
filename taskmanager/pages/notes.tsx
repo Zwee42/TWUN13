@@ -10,11 +10,11 @@ import { requireAuth } from "@/lib/auth";
 
 import { GetServerSideProps } from "next";
 
-     export const getServerSideProps: GetServerSideProps = async (ctx) => {
-            
-              return await requireAuth(ctx) || {redirect: { destination: '/login', permanent: false }};
-            
-            };
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+
+  return await requireAuth(ctx) || { redirect: { destination: '/login', permanent: false } };
+
+};
 
 type User = {
   email: string;
@@ -196,18 +196,24 @@ export default function NotesPage() {
       {/* Sidebar */}
       <aside className="w-72 backdrop-blur-md bg-black/40 border-r border-purple-900 p-6 flex flex-col gap-6 items-center justify-center shadow-xl">
         <h1 className="text-2xl font-bold text-purple-400 tracking-wide mb-6">
-          Notes
+          HMP
         </h1>
 
         <Link href="/notesList" passHref>
           <button className="w-full bg-purple-800/80 hover:bg-purple-700 py-3 px-4 rounded-lg text-center shadow-lg">
-            Notes list
+            Notes
           </button>
         </Link>
 
         <Link href="/trash" passHref>
           <button className="w-full bg-purple-900/80 hover:bg-purple-950 py-3 px-4 rounded-lg text-center shadow-lg">
             Trash
+          </button>
+        </Link>
+
+        <Link href="/homepage" passHref>
+          <button className="w-full bg-purple-900/80 hover:bg-purple-950 py-3 px-4 rounded-lg text-center shadow-lg">
+            Home
           </button>
         </Link>
       </aside>
@@ -262,7 +268,7 @@ export default function NotesPage() {
                 onClick={() => handleMoveToTrash(id as string)}
                 className="bg-red-600 text-white px-4 py-3 rounded-xl font-semibold hover:bg-red-500 shadow-md transition-all"
               >
-                Move to trash
+                Delete
               </button>
             )}
           </div>
@@ -286,8 +292,9 @@ export default function NotesPage() {
 
         {message && (
           <div
-            className={`mb-6 p-3 rounded-lg text-center font-medium shadow-md ${isSuccess ? "bg-green-600/70 text-green-100" : "bg-red-600/70 text-red-100"
-              }`}
+            className={`mb-6 p-3 rounded-lg text-center font-medium shadow-md ${
+              isSuccess ? "bg-green-600/70 text-green-100" : "bg-red-600/70 text-red-100"
+            }`}
           >
             {message}
           </div>
