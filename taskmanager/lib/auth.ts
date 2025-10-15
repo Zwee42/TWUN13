@@ -1,8 +1,8 @@
 import { GetServerSidePropsContext, NextApiRequest, Redirect } from 'next';
 import jwt from 'jsonwebtoken';
-import { SessionUser } from '@/models/sessionUser';
-import { execOnce, NextApiResponse } from 'next/dist/shared/lib/utils';
-import User, { IUser } from "@/models/User";
+import { SessionUser } from '@/types/SessionUser';
+import { NextApiResponse } from 'next/dist/shared/lib/utils';
+import { IUser } from '@/models/User';
 import { serialize } from 'cookie';
 
 const JWT_SECRET = process.env.JWT_SECRET!;
@@ -23,6 +23,7 @@ export async function requireAuth(ctx: GetServerSidePropsContext, redirectTo = '
     };
   }
 
+  // dircet message rad 21 till 25
   const token = authToken.split('=')[1];
 
   try {
@@ -68,7 +69,7 @@ export function signCookie (user: IUser, res: NextApiResponse ) {
   const newToken = jwt.sign(
         {
           userId: user.id,
-          username: user.username,
+          username: user.username, // här sparas värdet i token
           email: user.newEmail,
         },
         JWT_SECRET,
@@ -90,7 +91,8 @@ export function signCookie (user: IUser, res: NextApiResponse ) {
   const updateToken = jwt.sign(
         {
           userId: user.id,
-          username: user.username,
+          username: user.username, 
+   
           email: user.email,
         },
         JWT_SECRET,
@@ -113,6 +115,7 @@ export function signCookie (user: IUser, res: NextApiResponse ) {
             userId: user.id,
             username: user.username,
             email: user.email,
+ 
           }, JWT_SECRET, { expiresIn: '1h' });
       
           // Set the token in an HTTP-only cookie
