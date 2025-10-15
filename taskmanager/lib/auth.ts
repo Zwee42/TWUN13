@@ -1,8 +1,6 @@
 import { GetServerSidePropsContext, NextApiRequest, Redirect } from 'next';
 import jwt from 'jsonwebtoken';
-
 import { SessionUser } from '@/types/SessionUser';
-
 import { NextApiResponse } from 'next/dist/shared/lib/utils';
 import { IUser } from '@/models/User';
 import { serialize } from 'cookie';

@@ -18,8 +18,8 @@ export async function sendResetEmail(email: string, resetUrl: string) {
              <a href="${resetUrl}">${resetUrl}</a>`,
     });
 
-    console.log('✅ E-post Sent:', info.response);
+    console.log(' E-post Sent:', info.response);
   } catch (error) {
-    console.error('❌ Error sending email:', error);
+    console.error(' Error sending email:', error);
   }
 }
