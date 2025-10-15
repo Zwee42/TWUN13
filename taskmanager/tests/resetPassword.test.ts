@@ -5,7 +5,7 @@ import User from "@/models/User";
 import dbConnect from "@/lib/mongodb";
 
 // 🧩 Mocka beroenden (vi vill inte ansluta till riktig DB)
-jest.mock("@/lib/mongodb");
+jest.mock('../lib/mongodb', () => ({ __esModule: true, default: jest.fn() }));
 jest.mock("@/models/User");
 jest.mock("bcryptjs");
 
