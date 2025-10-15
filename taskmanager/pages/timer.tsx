@@ -6,16 +6,12 @@ import { Mode } from "fs";
 import {requireAuth} from '@/lib/auth';
 import { GetServerSideProps } from "next";
 
-
 // säger till Next.js that detta är bara till för de som använder sidan.
 // finns ingenting på servern som görs
-
             
-            export const getServerSideProps: GetServerSideProps = async (ctx) => {
-            
-              return await requireAuth(ctx) || {redirect: { destination: '/login', permanent: false }};
-            
-            };
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+            return await requireAuth(ctx) || {redirect: { destination: '/login', permanent: false }};
+          };
 
 
 
