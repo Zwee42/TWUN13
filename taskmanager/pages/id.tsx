@@ -5,7 +5,6 @@ import ReactMarkdown from "react-markdown";
 import remarkMath from "remark-math";
 import rehypeKatex from "rehype-katex";
 import { useNoteSocket } from "../hooks/useNoteSocket";
-import toast from "react-hot-toast";
 
 type Note = {
     _id: string;
@@ -47,7 +46,7 @@ export default function EditNotePage() {
     const username = loggedInUser?.username || loggedInUser?.email?.split('@')[0] || 'Anonymous';
 
     // Handle incoming content changes from other users
-    const handleIncomingContentChange = useCallback((data: any) => {
+    const handleIncomingContentChange = useCallback((data: { field: string; value: string }) => {
         if (data.field === 'title') {
             setTitle(data.value);
         } else if (data.field === 'content') {
@@ -76,7 +75,7 @@ export default function EditNotePage() {
             if (res.ok) {
                 setLastSaved(new Date());
             }
-        } catch (error) {
+        } catch {
             // Auto-save failed silently
         } finally {
             setIsSaving(false);
@@ -102,7 +101,7 @@ export default function EditNotePage() {
                 clearTimeout(saveTimeoutRef.current);
             }
         };
-    }, [title, content, autoSave]);
+    }, [title, content, noteId, autoSave]);
 
     // Handlers for title and content changes with real-time sync
     const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {

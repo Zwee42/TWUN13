@@ -7,16 +7,16 @@ const nextConfig: NextConfig = {
     // Enable WebSocket support
     esmExternals: false,
   },
-  webpack: (config: any, { isServer }: { isServer: boolean }) => {
-    if (!isServer) {
-      config.resolve.fallback = {
-        ...config.resolve.fallback,
-        net: false,
-        tls: false,
-      };
-    }
-    return config;
-  },
+  // webpack: (config: any, { isServer }: { isServer: boolean }) => {
+  //   if (!isServer) {
+  //     config.resolve.fallback = {
+  //       ...config.resolve.fallback,
+  //       net: false,
+  //       tls: false,
+  //     };
+  //   }
+  //   return config;
+  // },
 };
 
 export default nextConfig;

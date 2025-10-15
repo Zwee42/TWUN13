@@ -26,7 +26,6 @@ export default function ResetPasswordPage() {
       body: JSON.stringify({ token, password }),
     });
 
-    const data = await res.json();
     if (res.ok) {
       setMessage('Your password has been reset');
       setIsSuccess(true);
@@ -36,10 +35,7 @@ export default function ResetPasswordPage() {
       setIsSuccess(false);
     }
   };
-  const reg_button = (e: React.MouseEvent) => {
-    e.preventDefault();
-    window.location.href = "/";
-  };
+
   return (
     <div className="flex min-h-screen bg-gradient-to-br from-black via-purple-950 to-black text-white">
       {/* Sidebar */}

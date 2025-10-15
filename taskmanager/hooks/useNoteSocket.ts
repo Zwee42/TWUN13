@@ -1,7 +1,8 @@
+import { ContentChangeData } from '@/types/ContentChangeData';
 import { useEffect, useRef, useState } from 'react';
 import { io, Socket } from 'socket.io-client';
 
-export const useNoteSocket = (noteId: string | null, userId: string, username: string, onContentChanged?: (data: any) => void) => {
+export const useNoteSocket = (noteId: string | null, userId: string, username: string, onContentChanged?: (data: ContentChangeData) => void) => {
   const socketRef = useRef<Socket | null>(null);
   const [isConnected, setIsConnected] = useState(false);
 
@@ -31,11 +32,7 @@ export const useNoteSocket = (noteId: string | null, userId: string, username: s
           setIsConnected(false);
         });
 
-        socket.on('user-joined', (data: any) => {
-          // User joined notification
-        });
-
-        socket.on('content-changed', (data: any) => {
+        socket.on('content-changed', (data: ContentChangeData) => {
           // Handle incoming content changes - allow same user from different browser tabs/devices
           if (data.socketId !== socket.id) {
             if (onContentChanged) {
@@ -45,7 +42,7 @@ export const useNoteSocket = (noteId: string | null, userId: string, username: s
         });
 
       } catch (error) {
-        // Error initializing socket
+        console.error("Socket initialization error:", error);
       }
     };
 

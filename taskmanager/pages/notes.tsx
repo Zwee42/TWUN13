@@ -1,10 +1,9 @@
-import { useState, useEffect, useCallback, useRef } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import ReactMarkdown from "react-markdown";
 import remarkMath from "remark-math";
 import rehypeKatex from "rehype-katex";
-import toast from "react-hot-toast";
 
 
 import { requireAuth } from "@/lib/auth";
@@ -17,13 +16,6 @@ import { GetServerSideProps } from "next";
             
             };
 
-// type Note = {
-//   _id: string;
-//   title: string;
-//   content: string;
-//   createdAt: string;
-//   updatedAt?: string;
-// };
 type User = {
   email: string;
   username?: string;
