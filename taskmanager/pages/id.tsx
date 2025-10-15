@@ -1,9 +1,10 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import ReactMarkdown from "react-markdown";
 import remarkMath from "remark-math";
 import rehypeKatex from "rehype-katex";
+import { useNoteSocket } from "../hooks/useNoteSocket";
 
 type Note = {
     _id: string;
@@ -23,6 +24,101 @@ export default function EditNotePage() {
     const [message, setMessage] = useState("");
     const [isSuccess, setIsSuccess] = useState(false);
     const [shareEmail, setShareEmail] = useState("");
+
+    // Get user info for socket
+    const [loggedInUser, setLoggedInUser] = useState<{ email: string; username?: string } | null>(null);
+
+    // Get user from localStorage, will change to cookies later
+    useEffect(() => {
+        const raw = typeof window !== "undefined" ? localStorage.getItem("user") : null;
+        if (raw) {
+            try {
+                setLoggedInUser(JSON.parse(raw));
+            } catch {
+                setLoggedInUser(null);
+            }
+        }
+    }, []);
+
+    // Socket integration for real-time collaboration
+    const noteId = Array.isArray(id) ? id[0] : id;
+    const userId = loggedInUser?.email || '';
+    const username = loggedInUser?.username || loggedInUser?.email?.split('@')[0] || 'Anonymous';
+
+    // Handle incoming content changes from other users
+    const handleIncomingContentChange = useCallback((data: { field: string; value: string }) => {
+        if (data.field === 'title') {
+            setTitle(data.value);
+        } else if (data.field === 'content') {
+            setContent(data.value);
+        }
+    }, []);
+
+    const { isConnected, emitContentChange } = useNoteSocket(noteId || null, userId, username, handleIncomingContentChange);
+
+    // Auto-save functionality
+    const [lastSaved, setLastSaved] = useState<Date | null>(null);
+    const [isSaving, setIsSaving] = useState(false);
+    const saveTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+    const autoSave = useCallback(async () => {
+        if (!noteId || !title.trim()) return;
+
+        setIsSaving(true);
+        try {
+            const res = await fetch(`/api/id?id=${noteId}`, {
+                method: "PUT",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ title, content }),
+            });
+
+            if (res.ok) {
+                setLastSaved(new Date());
+            }
+        } catch {
+            // Auto-save failed silently
+        } finally {
+            setIsSaving(false);
+        }
+    }, [noteId, title, content]);
+
+    // Auto-save on content change with debounce
+    useEffect(() => {
+        if (!noteId) return;
+
+        // Clear existing timeout
+        if (saveTimeoutRef.current) {
+            clearTimeout(saveTimeoutRef.current);
+        }
+
+        // Set new timeout for auto-save (2 seconds after last change)
+        saveTimeoutRef.current = setTimeout(() => {
+            autoSave();
+        }, 2000);
+
+        return () => {
+            if (saveTimeoutRef.current) {
+                clearTimeout(saveTimeoutRef.current);
+            }
+        };
+    }, [title, content, noteId, autoSave]);
+
+    // Handlers for title and content changes with real-time sync
+    const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const newTitle = e.target.value;
+        setTitle(newTitle);
+        if (noteId && isConnected) {
+            emitContentChange('title', newTitle);
+        }
+    };
+
+    const handleContentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+        const newContent = e.target.value;
+        setContent(newContent);
+        if (noteId && isConnected) {
+            emitContentChange('content', newContent);
+        }
+    };
 
     // Hämta anteckningen
     useEffect(() => {
@@ -185,19 +281,49 @@ export default function EditNotePage() {
 
             {/* Main */}
             <main className="flex-1 p-10">
-                <h2 className="text-3xl font-bold mb-8 text-purple-300 drop-shadow-lg">
-                    Edit Note
-                </h2>
+                <div className="flex justify-between items-center mb-8">
+                    <h2 className="text-3xl font-bold text-purple-300 drop-shadow-lg">
+                        Edit Note
+                    </h2>
+                    <div className="flex items-center gap-4 text-sm">
+                        <div className={`flex items-center gap-2 ${isConnected ? 'text-green-400' : 'text-red-400'}`}>
+                            <div className={`w-2 h-2 rounded-full ${isConnected ? 'bg-green-400' : 'bg-red-400'}`}></div>
+                            Sync {isConnected ? 'Enabled' : 'Offline'}
+                        </div>
+                        {isSaving && (
+                            <div className="text-blue-400 flex items-center gap-2">
+                                <div className="w-2 h-2 rounded-full bg-blue-400 animate-pulse"></div>
+                                Saving...
+                            </div>
+                        )}
+                        {lastSaved && !isSaving && (
+                            <div className="text-gray-400">
+                                Saved {lastSaved.toLocaleTimeString()}
+                            </div>
+                        )}
+                    </div>
+                </div>
 
                 <form
                     onSubmit={handleSubmit}
                     className="flex flex-col gap-4 mb-10 bg-black/60 border border-purple-900 p-6 rounded-2xl shadow-xl backdrop-blur-md"
                 >
+                    {/* {isConnected && (
+                        <div className="mb-4 p-3 bg-green-900/30 border border-green-700 rounded-lg">
+                            <div className="flex items-center gap-2 text-green-300">
+                                <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
+                                <span className="text-sm">
+                                    Live collaboration enabled - changes will sync in real-time
+                                </span>
+                            </div>
+                        </div>
+                    )} */}
+
                     <input
                         className="border border-purple-700 bg-black/80 p-3 rounded-lg focus:ring-2 focus:ring-purple-600 outline-none text-white"
                         placeholder="Titel"
                         value={title}
-                        onChange={(e) => setTitle(e.target.value)}
+                        onChange={handleTitleChange}
                     />
 
                     {/* Preview */}
@@ -214,7 +340,7 @@ export default function EditNotePage() {
                         className="border border-purple-700 bg-black/80 p-3 rounded-lg resize-none focus:ring-2 focus:ring-purple-600 outline-none text-white mt-2 min-h-[100px]"
                         placeholder="Skriv din anteckning här..."
                         value={content}
-                        onChange={(e) => setContent(e.target.value)}
+                        onChange={handleContentChange}
                     />
 
                     <div className="flex gap-3">

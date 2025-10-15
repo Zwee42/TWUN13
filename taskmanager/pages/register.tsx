@@ -4,7 +4,6 @@ import { useState } from "react";
 export default function Home() {
   const [email, setEmailValue] = useState("");
   const [username, setUserValue] = useState("");
-  const [message, setMessage] = useState("");
   const [password, setPasswordValue] = useState("");
 
 
@@ -40,7 +39,6 @@ export default function Home() {
 
     } catch (err) {
       console.error(err);
-      setMessage("Failed to register");
     }
 
   };

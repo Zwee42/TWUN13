@@ -2,7 +2,6 @@ import handler from "@/pages/api/resetPassword";
 import { createMocks } from "node-mocks-http";
 import bcrypt from "bcryptjs";
 import User from "@/models/User";
-import dbConnect from "@/lib/mongodb";
 
 // 🧩 Mocka beroenden (vi vill inte ansluta till riktig DB)
 jest.mock('../lib/mongodb', () => ({ __esModule: true, default: jest.fn() }));
