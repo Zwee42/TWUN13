@@ -252,7 +252,7 @@ const Dashboard: React.FC = () => {
                 Add Todo
               </button>
               <button
-                onClick={() => router.push('/')}
+                onClick={() => router.push('/homepage')}
                 className="bg-purple-800/50 text-purple-200 px-4 py-2 rounded-lg font-semibold shadow-md hover:bg-purple-700/50 transition"
               >
                 <svg className="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">

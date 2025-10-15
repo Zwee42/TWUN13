@@ -6,13 +6,8 @@ import { SessionUser } from '@/types/SessionUser';
 
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
-
-  return await requireAuth(ctx) || { redirect: { destination: "/login", permanent: false } };
-
+  return await requireAuth(ctx, "/login");
 };
- // import cookies
-
-
 
 export default function Home({ user }: { user: SessionUser }) {
   

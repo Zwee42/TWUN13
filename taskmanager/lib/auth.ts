@@ -6,7 +6,7 @@ import { IUser } from '@/models/User';
 import { serialize } from 'cookie';
 
 const JWT_SECRET = process.env.JWT_SECRET!;
-export async function requireAuth(ctx: GetServerSidePropsContext, redirectTo = '/') {
+export async function requireAuth(ctx: GetServerSidePropsContext, redirectTo = '/login') {
   const { req } = ctx;
   const cookie = req.headers.cookie || '';
 

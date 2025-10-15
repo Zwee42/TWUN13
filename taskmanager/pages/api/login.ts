@@ -55,7 +55,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                          httpOnly: true, // man kan inte redigera med javaskrcip
                          secure: process.env.NODE_ENV === "production", // encryptera kakan dubbel encypted
                          sameSite: "strict", // bara våran hemsida som kan använda kakan
-                         maxAge: 40, // hur lång tid kakan håller i s
+                         maxAge: 3600, // hur lång tid kakan håller i s
                          path: "/", // vilka ställen man har timern på 
                      }) ;
 
