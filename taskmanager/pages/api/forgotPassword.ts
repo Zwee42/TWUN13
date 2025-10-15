@@ -12,13 +12,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     await dbConnect();
   
     const user = await User.findOne({ email });
-  
+
     if (!user) return res.status(404).json({ error: 'User not found' });
 
   const resetToken = crypto.randomBytes(32).toString("hex");
   // denna urelen ska justeras 
  
-  const resetUrl = (process.env.NODE_ENV=="production"?"https://hmp.zwee.dev":`http://localhost:3000`)+`/reset-password?token=${resetToken}`;
+  const resetUrl = (process.env.NODE_ENV=="production"?"https://hmp.zwee.dev":`http://localhost:3000`)+`/resetPassword?token=${resetToken}`;
   user.resetToken = resetToken;
   user.resetTokenExpire = Date.now() + 1000 * 60 * 15; // 15 min
   await user.save();
