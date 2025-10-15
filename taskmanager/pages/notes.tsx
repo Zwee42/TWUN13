@@ -1,9 +1,10 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import ReactMarkdown from "react-markdown";
 import remarkMath from "remark-math";
 import rehypeKatex from "rehype-katex";
+import toast from "react-hot-toast";
 
 // type Note = {
 //   _id: string;
@@ -219,12 +220,14 @@ export default function NotesPage() {
           onSubmit={handleSubmit}
           className="flex flex-col gap-4 mb-10 bg-black/60 border border-purple-900 p-6 rounded-2xl shadow-xl backdrop-blur-md"
         >
-          <input
-            className="border border-purple-700 bg-black/80 p-3 rounded-lg focus:ring-2 focus:ring-purple-600 outline-none text-white"
-            placeholder="Title"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-          />
+          <div className="relative">
+            <input
+              className="border border-purple-700 bg-black/80 p-3 rounded-lg focus:ring-2 focus:ring-purple-600 outline-none text-white w-full"
+              placeholder="Title"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+            />
+          </div>
 
           {/* Live preview */}
           <div className="mt-2 p-4 border border-purple-700 rounded-xl bg-black/50 shadow-inner prose prose-invert max-w-none break-words">
@@ -233,12 +236,14 @@ export default function NotesPage() {
             </ReactMarkdown>
           </div>
 
-          <textarea
-            className="border border-purple-700 bg-black/80 p-3 rounded-lg resize-none focus:ring-2 focus:ring-purple-600 outline-none text-white mt-2 min-h-[100px]"
-            placeholder="Write your note here (supports **Markdown** and $\\LaTeX$)"
-            value={content}
-            onChange={(e) => setContent(e.target.value)}
-          />
+          <div className="relative">
+            <textarea
+              className="border border-purple-700 bg-black/80 p-3 rounded-lg resize-none focus:ring-2 focus:ring-purple-600 outline-none text-white mt-2 min-h-[100px] w-full"
+              placeholder="Write your note here (supports **Markdown** and $\\LaTeX$)"
+              value={content}
+              onChange={(e) => setContent(e.target.value)}
+            />
+          </div>
 
           <div className="flex gap-3">
             <button
@@ -278,9 +283,8 @@ export default function NotesPage() {
 
         {message && (
           <div
-            className={`mb-6 p-3 rounded-lg text-center font-medium shadow-md ${
-              isSuccess ? "bg-green-600/70 text-green-100" : "bg-red-600/70 text-red-100"
-            }`}
+            className={`mb-6 p-3 rounded-lg text-center font-medium shadow-md ${isSuccess ? "bg-green-600/70 text-green-100" : "bg-red-600/70 text-red-100"
+              }`}
           >
             {message}
           </div>
