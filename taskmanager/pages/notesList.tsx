@@ -2,6 +2,19 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { Note, NoteContent} from "@/components/NoteComponent";
 
+
+import { requireAuth } from "@/lib/auth";
+
+import { GetServerSideProps } from "next";
+
+     export const getServerSideProps: GetServerSideProps = async (ctx) => {
+            
+              return await requireAuth(ctx) || {redirect: { destination: '/login', permanent: false }};
+            
+            };
+
+
+
 export default function NotesListPage() {
   const [notes, setNotes] = useState<Note[]>([]);
   const [loading, setLoading] = useState(true);

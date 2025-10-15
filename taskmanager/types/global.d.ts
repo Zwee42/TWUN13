@@ -1,6 +1,7 @@
 // types/global.d.ts
 import type { Mongoose } from "mongoose";
 
+
 export {};
 
 declare global {
@@ -8,5 +9,9 @@ declare global {
   var mongoose: {
     conn: unknown | null;
     promise: Promise<Mongoose> | null;
+    
   };
+
+
 }
+

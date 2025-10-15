@@ -4,7 +4,7 @@ import { useState } from "react";
 export default function Home() {
   const [email, setEmailValue] = useState("");
   const [username, setUserValue] = useState("");
-  const [, setMessage] = useState("");
+  const [message, setMessage] = useState("");
   const [password, setPasswordValue] = useState("");
 
 

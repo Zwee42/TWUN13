@@ -6,6 +6,17 @@ import remarkMath from "remark-math";
 import rehypeKatex from "rehype-katex";
 import toast from "react-hot-toast";
 
+
+import { requireAuth } from "@/lib/auth";
+
+import { GetServerSideProps } from "next";
+
+     export const getServerSideProps: GetServerSideProps = async (ctx) => {
+            
+              return await requireAuth(ctx) || {redirect: { destination: '/login', permanent: false }};
+            
+            };
+
 // type Note = {
 //   _id: string;
 //   title: string;

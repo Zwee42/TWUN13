@@ -9,11 +9,11 @@ export default function App({ Component, pageProps }: AppProps) {
       <Toaster 
         position="top-right"
         toastOptions={{
-          duration: 3000,
+          duration: 4000,
           style: {
-            background: '#1e1b4b',
-            color: '#e0e7ff',
-            border: '1px solid #6d28d9',
+            background: '#1f2937',
+            color: '#fff',
+            border: '1px solid #374151',
           },
         }}
       />
