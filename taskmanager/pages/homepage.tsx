@@ -15,10 +15,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
 
 
 export default function Home({ user }: { user: SessionUser }) {
-
-
-  console.log(user);
-
+  
   const handleTimerClick = async () => {
     window.location.href = "/timer";
   };
@@ -26,9 +23,7 @@ export default function Home({ user }: { user: SessionUser }) {
   const handleNote = () => {
     window.location.href = "/notes"
   }
-
-
-
+  
   const handleLogout = async () => {
 
         try {
@@ -46,6 +41,9 @@ export default function Home({ user }: { user: SessionUser }) {
   }
 
 
+  const handleDashboard = () => {
+    window.location.href = "/dashboard";
+  };
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-br from-black via-purple-950 to-black">
@@ -72,13 +70,13 @@ export default function Home({ user }: { user: SessionUser }) {
         Notes
       </button>
 
-      <button
-        onClick={handleTimerClick}
+        collaboration
+     <button
+        onClick={handleDashboard}
         className="mb-4 px-6 py-3 bg-purple-600 text-white font-semibold rounded-lg shadow-md hover:bg-purple-700 transition"
       >
-        collaboration
+        Todo Dashboard
       </button>
-
       <button
         onClick={handleLogout}
         className="px-6 py-3 bg-black text-white font-semibold rounded-lg shadow-md hover:bg-purple-700 transition"
@@ -86,7 +84,7 @@ export default function Home({ user }: { user: SessionUser }) {
         Back to login
       </button>
 
-
+ 
 
     </div>
   );
